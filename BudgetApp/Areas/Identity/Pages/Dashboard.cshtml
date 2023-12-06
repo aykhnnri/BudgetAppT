@@ -1,0 +1,54 @@
+﻿@page
+@model DashboardModel
+
+@{
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h2>Welcome, @Model.FirstName!</h2>
+        <div class="my-4 p-3 bg-white rounded shadow-sm">
+            <h3 class="border-bottom border-gray pb-2 mb-0">Balance</h3>
+            <div class="pt-3">
+                <p class="text-success font-weight-bold">@Model.Balance.ToString("C")</p>
+            </div>
+        </div>
+
+        <div class="my-4 p-3 bg-white rounded shadow-sm">
+            <h3 class="border-bottom border-gray pb-2 mb-0">Recent Transactions</h3>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var transaction in Model.RecentTransactions)
+                        {
+                            <tr>
+                                <td>@transaction.Date.ToShortDateString()</td>
+                                <td>@transaction.Amount.ToString("C")</td>
+                                <td>@transaction.Category</td>
+                                <td>@transaction.Description</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-right">
+                <a asp-area="" asp-controller="Transactions" asp-action="Index" class="btn btn-primary">View All Transactions</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

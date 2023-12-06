@@ -1,0 +1,75 @@
+﻿@page
+@model BudgetApp.Areas.Identity.Pages.TransactionsModel
+@{
+}
+
+
+<body>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">All Transactions</h2>
+
+        <div class="text-right mb-3">
+            <a asp-page="/AddTransaction" class="btn btn-success">Add Transaction</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var transaction in Model.AllTransactions)
+                    {
+                        <tr>
+                            <td>@transaction.Date.ToShortDateString()</td>
+                            <td>@transaction.Amount.ToString("C")</td>
+							<td>@transaction.Category</td>
+                            <td>@transaction.Description</td>
+                            <td>
+                                <button onclick="location.href='@Url.Page("Transactions", "Edit", new { transactionId = transaction.TransactionId })'">Edit</button>
+                                <button onclick="if(confirm('Are you sure you want to delete this transaction?')) location.href='@Url.Page("Transactions", "Delete", new { transactionId = transaction.TransactionId })'">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <form method="post" onsubmit="SaveEdit()">
+                <div class="form-group">
+                    <label for="editAmount">Amount:</label>
+                    <input id="editAmount" class="form-control" type="number" step="0.01" />
+                </div>
+                <div class="form-group">
+                    <label for="editCategory">Category:</label>
+                    <select id="editCategory" class="form-control" asp-items="@(new SelectList(Model.Categories, "Value", "Text"))">
+                        <option value="">Select a category</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Description:</label>
+                    <input id="editDescription" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="editDate">Date:</label>
+                    <input id="editDate" class="form-control" type="date" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" onclick="CloseEditModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
